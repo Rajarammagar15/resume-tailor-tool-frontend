@@ -31,6 +31,19 @@ const initialFormState = {
   jobDescription: ''
 };
 
+function formatMonthYear(value) {
+  if (!value) return "";
+
+  const [year, month] = value.split("-");
+
+  const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
+  return `${months[parseInt(month) - 1]} ${year}`;
+}
+
 function ResumeBuilder() {
   const [formData, setFormData] = useState(initialFormState);
   const [loading, setLoading] = useState(false);
@@ -50,7 +63,7 @@ function ResumeBuilder() {
     concepts: ''
   });
 
-  const skillCategories = ["languages","backend","databases","cloud","tools","concepts"];
+  const skillCategories = ["languages", "backend", "databases", "cloud", "tools", "concepts"];
 
   const updateFormData = (updater) => {
     setFormData(prev => updater(prev));
@@ -98,8 +111,11 @@ function ResumeBuilder() {
           role: '',
           company: '',
           location: '',
-          duration: '',
-          description: ''
+          startDate: '',
+          endDate: '',
+          current: false,
+          description: '',
+          type: 'FULL_TIME'
         }
       ]
     }));
@@ -160,7 +176,8 @@ function ResumeBuilder() {
           degree: '',
           institution: '',
           location: '',
-          duration: '',
+          startDate: '',
+          endDate: '',
           grade: ''
         }
       ]
@@ -241,13 +258,39 @@ function ResumeBuilder() {
     setLoading(true);
     setError(null);
 
+    const formattedData = {
+      ...formData,
+
+      experience: formData.experience.map(exp => {
+        const start = formatMonthYear(exp.startDate);
+        const end = exp.current
+          ? "Present"
+          : formatMonthYear(exp.endDate);
+
+        return {
+          ...exp,
+          duration: `${start} - ${end}`
+        };
+      }),
+
+      education: formData.education.map(edu => {
+        const start = formatMonthYear(edu.startDate);
+        const end = formatMonthYear(edu.endDate);
+
+        return {
+          ...edu,
+          duration: `${start} - ${end}`
+        };
+      })
+    };
+
     try {
       const response = await fetch(`${API_BASE_URL}/resume/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formattedData),
       });
 
       if (!response.ok) {
@@ -337,7 +380,7 @@ function ResumeBuilder() {
               onChange={(e) => {
                 const value = e.target.value;
 
-                if (/^\d*\.?\d*$/.test(value) && (value === "" || parseFloat(value) <= 50)){
+                if (/^\d*\.?\d*$/.test(value) && (value === "" || parseFloat(value) <= 50)) {
                   updateFormData(prev => ({
                     ...prev,
                     yearsOfExperience: value
@@ -414,13 +457,25 @@ function ResumeBuilder() {
             <div key={index} className="experience-item">
               <div className="item-header">
                 <h4>Experience {index + 1}</h4>
-                <button
-                  type="button"
-                  onClick={() => removeExperience(index)}
-                  className="btn btn-danger btn-icon"
-                >
-                  <Trash2 size={16} />
-                </button>
+
+                <div className="experience-header-actions">
+                  <label className="checkbox-row">
+                    <input
+                      type="checkbox"
+                      checked={exp.current || false}
+                      onChange={(e) => updateExperience(index, "current", e.target.checked)}
+                    />
+                    Currently Working Here
+                  </label>
+
+                  <button
+                    type="button"
+                    onClick={() => removeExperience(index)}
+                    className="btn btn-danger btn-icon"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
               <div className="form-grid">
                 <input
@@ -444,13 +499,50 @@ function ResumeBuilder() {
                   onChange={(e) => updateExperience(index, 'location', e.target.value)}
                   className="form-input"
                 />
-                <input
-                  type="text"
-                  placeholder="Duration (e.g., Jan 2020 - Present)"
-                  value={exp.duration}
-                  onChange={(e) => updateExperience(index, 'duration', e.target.value)}
-                  className="form-input"
-                />
+
+                <div className="experience-type-row">
+                  <label className="form-label">Experience Type</label>
+                  <div className="experience-type-toggle">
+                    <button
+                      type="button"
+                      className={`toggle-btn ${exp.type === "FULL_TIME" ? "active" : ""}`}
+                      onClick={() => updateExperience(index, "type", "FULL_TIME")}
+                    >
+                      💼 Full Time
+                    </button>
+
+                    <button
+                      type="button"
+                      className={`toggle-btn ${exp.type === "INTERNSHIP" ? "active" : ""}`}
+                      onClick={() => updateExperience(index, "type", "INTERNSHIP")}
+                    >
+                      🎓 Internship
+                    </button>
+                  </div>
+                </div>
+
+                {/* <div className="duration-row"> */}
+                <div className="date-field">
+                  <label className="form-label">Start Date</label>
+                  <input
+                    type="month"
+                    value={exp.startDate || ""}
+                    onChange={(e) => updateExperience(index, "startDate", e.target.value)}
+                    className="form-input"
+                  />
+                </div>
+
+                <div className="date-field">
+                  <label className="form-label">End Date</label>
+                  <input
+                    type="month"
+                    disabled={exp.current}
+                    value={exp.endDate || ""}
+                    onChange={(e) => updateExperience(index, "endDate", e.target.value)}
+                    className="form-input"
+                  />
+                </div>
+                {/* </div> */}
               </div>
               <textarea
                 placeholder="Describe your responsibilities and achievements..."
@@ -552,18 +644,32 @@ function ResumeBuilder() {
                 />
                 <input
                   type="text"
-                  placeholder="Duration"
-                  value={edu.duration}
-                  onChange={(e) => updateEducation(index, 'duration', e.target.value)}
-                  className="form-input"
-                />
-                <input
-                  type="text"
                   placeholder="Grade/CGPA"
                   value={edu.grade}
                   onChange={(e) => updateEducation(index, 'grade', e.target.value)}
-                  className="form-input full-width"
+                  className="form-input"
                 />
+
+                <div className="date-field">
+                  <label className="form-label">Start Date</label>
+                  <input
+                    type="month"
+                    value={edu.startDate || ""}
+                    onChange={(e) => updateEducation(index, "startDate", e.target.value)}
+                    className="form-input"
+                  />
+                </div>
+
+                <div className="date-field">
+                  <label className="form-label">End Date</label>
+                  <input
+                    type="month"
+                    value={edu.endDate || ""}
+                    onChange={(e) => updateEducation(index, "endDate", e.target.value)}
+                    className="form-input"
+                  />
+                </div>
+
               </div>
             </div>
           ))}

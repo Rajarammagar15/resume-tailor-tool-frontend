@@ -182,61 +182,63 @@ function AnalysisResults({ data }) {
       )}
 
 
-      {/* Experience */}
-      {resume?.experience && resume.experience.length > 0 && (
+      {resume?.experience?.filter(exp => exp && exp.role)?.length > 0 && (
         <div className="experience-section">
           <h3>Experience Overview</h3>
 
           <div className="experience-list">
-            {resume.experience.map((exp, index) => (
-              <div key={index} className="experience-card">
+            {resume.experience
+              .filter(exp => exp && exp.role)
+              .map((exp, index) => (
+                <div key={index} className="experience-card">
 
-                <div className="exp-header">
-                  <h4>{exp.role}</h4>
-                  <span className="exp-duration">{exp.duration}</span>
+                  <div className="exp-header">
+                    <h4>{exp.role}</h4>
+                    <span className="exp-duration">{exp.duration}</span>
+                  </div>
+
+                  <p className="exp-company">
+                    {exp.company} • {exp.location}
+                  </p>
+
+                  {exp.bullets && exp.bullets.length > 0 && (
+                    <ul className="exp-bullets">
+                      {exp.bullets.map((bullet, idx) => (
+                        <li key={idx}>{bullet}</li>
+                      ))}
+                    </ul>
+                  )}
+
                 </div>
-
-                <p className="exp-company">
-                  {exp.company} • {exp.location}
-                </p>
-
-                {exp.bullets && exp.bullets.length > 0 && (
-                  <ul className="exp-bullets">
-                    {exp.bullets.map((bullet, idx) => (
-                      <li key={idx}>{bullet}</li>
-                    ))}
-                  </ul>
-                )}
-
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       )}
 
 
-      {/* Projects */}
-      {resume?.projects && resume.projects.length > 0 && (
+      {resume?.projects?.filter(p => p && p.name)?.length > 0 && (
         <div className="projects-section">
           <h3>Key Projects</h3>
 
           <div className="projects-list">
-            {resume.projects.map((project, index) => (
-              <div key={index} className="project-card">
+            {resume.projects
+              .filter(p => p && p.name)
+              .map((project, index) => (
+                <div key={index} className="project-card">
 
-                <h4>{project.name}</h4>
-                <p className="project-tech">{project.techStack}</p>
+                  <h4>{project.name}</h4>
+                  <p className="project-tech">{project.techStack}</p>
 
-                {project.bullets && project.bullets.length > 0 && (
-                  <ul className="project-bullets">
-                    {project.bullets.map((bullet, idx) => (
-                      <li key={idx}>{bullet}</li>
-                    ))}
-                  </ul>
-                )}
+                  {project.bullets && project.bullets.length > 0 && (
+                    <ul className="project-bullets">
+                      {project.bullets.map((bullet, idx) => (
+                        <li key={idx}>{bullet}</li>
+                      ))}
+                    </ul>
+                  )}
 
-              </div>
-            ))}
+                </div>
+              ))}
           </div>
         </div>
       )}

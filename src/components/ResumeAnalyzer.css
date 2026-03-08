@@ -26,7 +26,7 @@
 
 .analysis-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .analysis-icon {
@@ -75,8 +75,8 @@
   border-radius: 0px 30px 0px 30px;
   padding: 36px;
   box-shadow:
-      0 20px 60px rgba(0,0,0,0.08),
-      0 8px 24px rgba(0,0,0,0.05);
+    0 20px 60px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.05);
 
   position: relative;
   z-index: 5;
@@ -102,7 +102,7 @@
   padding: 70px;
   text-align: center;
   transition: all 0.25s ease;
-  background: linear-gradient(180deg,#f8fafc,#f1f5f9);
+  background: linear-gradient(180deg, #f8fafc, #f1f5f9);
   cursor: pointer;
 }
 
@@ -195,7 +195,7 @@
   outline: none;
   border-color: #667eea;
   background: white;
-  box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
 .char-count {
@@ -348,6 +348,7 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+
   .analyzer-form,
   .analysis-results-container {
     padding: 24px;
@@ -373,14 +374,14 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
   border-radius: 10px;
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(99,102,241,0.35);
+  box-shadow: 0 8px 18px rgba(99, 102, 241, 0.35);
 }
 
 .analyzer-form {
@@ -392,6 +393,7 @@
     opacity: 0;
     transform: translateY(15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -399,13 +401,13 @@
 }
 
 .hero-section {
-  background: linear-gradient(135deg,#7788d2 0%,#764ba2 100%);
+  background: linear-gradient(135deg, #7788d2 0%, #764ba2 100%);
   padding: 30px 20px 110px;
   text-align: center;
   color: white;
   border-radius: 30px 0px 30px 0px;
   margin-bottom: 30px;
-  height:200px;
+  height: 200px;
 }
 
 /* =========================
@@ -471,6 +473,27 @@
   color: #334155;
 }
 
-.project-item input{
+.project-item input {
   margin-bottom: 20px;
+}
+
+.extra-input-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.extra-input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  font-size: 14px;
+}
+
+.extra-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }

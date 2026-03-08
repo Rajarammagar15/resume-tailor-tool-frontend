@@ -15,6 +15,7 @@ function ResumeAnalyzer() {
   const [analysisResult, setAnalysisResult] = useState(null);
   const [showPDFPreview, setShowPDFPreview] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState('MODERN');
+  const [extraSkills, setExtraSkills] = useState('');
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -57,7 +58,18 @@ function ResumeAnalyzer() {
 
     const formData = new FormData();
     formData.append('resumeFile', resumeFile);
-    formData.append('jobDescription', jobDescription);
+    
+    const requestPayload = {
+      jobDescription,
+      extraSkills: extraSkills
+        ? extraSkills.split(',').map(s => s.trim())
+        : []
+    };
+
+    formData.append(
+      "data",
+      new Blob([JSON.stringify(requestPayload)], { type: "application/json" })
+    );
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/v1/analyze`, {
@@ -141,6 +153,17 @@ function ResumeAnalyzer() {
                   </>
                 )}
               </label>
+            </div>
+
+            <div className="extra-input-section">
+              <label className="jd-label">Extra Skills (Optional)</label>
+              <input
+                type="text"
+                className="extra-input"
+                placeholder="Example: Kafka, Redis, Docker"
+                value={extraSkills}
+                onChange={(e) => setExtraSkills(e.target.value)}
+              />
             </div>
           </div>
 
