@@ -175,6 +175,7 @@ function ResumeBuilder() {
         {
           degree: '',
           institution: '',
+          specialization: '',
           location: '',
           startDate: '',
           endDate: '',
@@ -637,9 +638,9 @@ function ResumeBuilder() {
                 />
                 <input
                   type="text"
-                  placeholder="Location"
-                  value={edu.location}
-                  onChange={(e) => updateEducation(index, 'location', e.target.value)}
+                  placeholder="Institutional Specialization (e.g., Computer Science)"
+                  value={edu.specialization}
+                  onChange={(e) => updateEducation(index, 'specialization', e.target.value)}
                   className="form-input"
                 />
                 <input
@@ -648,6 +649,13 @@ function ResumeBuilder() {
                   value={edu.grade}
                   onChange={(e) => updateEducation(index, 'grade', e.target.value)}
                   className="form-input"
+                />
+                <input
+                  type="text"
+                  placeholder="Location"
+                  value={edu.location}
+                  onChange={(e) => updateEducation(index, 'location', e.target.value)}
+                  className="form-input full-width"
                 />
 
                 <div className="date-field">
