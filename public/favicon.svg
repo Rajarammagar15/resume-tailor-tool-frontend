@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Purple rounded background -->
+  <rect width="64" height="64" rx="12" fill="#6366f1"/>
+
+  <!-- Document -->
+  <rect x="12" y="8" width="28" height="36" rx="3" fill="white"/>
+  <rect x="16" y="16" width="16" height="2.5" rx="1" fill="#c7d2fe"/>
+  <rect x="16" y="22" width="20" height="2.5" rx="1" fill="#c7d2fe"/>
+  <rect x="16" y="28" width="14" height="2.5" rx="1" fill="#c7d2fe"/>
+
+  <!-- Lightning bolt overlay -->
+  <polygon
+    points="36,18 28,34 34,34 26,52 44,30 37,30"
+    fill="#fbbf24"
+    stroke="#f59e0b"
+    stroke-width="1"
+  />
+</svg>
