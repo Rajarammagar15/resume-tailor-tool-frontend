@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, FileText, AlertCircle, CheckCircle, X, Download, FileSearch } from 'lucide-react';
 import PDFPreview from './PDFPreview';
 import AnalysisResults from './AnalysisResults';
@@ -16,6 +16,42 @@ function ResumeAnalyzer() {
   const [showPDFPreview, setShowPDFPreview] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState('MODERN');
   const [extraSkills, setExtraSkills] = useState('');
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+
+  const loadingMessages = [
+    "Analyzing your job description...",
+    "Extracting key skills from JD...",
+    "Parsing your resume...",
+    "Identifying technical experience...",
+    "Matching resume with job requirements...",
+    "Calculating AI compatibility score...",
+    "Checking missing skills...",
+    "Generating insights for your resume...",
+    "Finalizing your analysis..."
+  ];
+
+  useEffect(() => {
+    if (!loading) return;
+
+    setProgress(0);
+    setLoadingMessageIndex(0);
+    let tick = 0;
+    const interval = setInterval(() => {
+      tick++;
+      setProgress((prev) => {
+        if (prev >= 95) return prev;
+        return prev + 1;
+      });
+
+      if (tick % 10 === 0) {
+        setLoadingMessageIndex((prev) => (prev + 1) % loadingMessages.length);
+      }
+    }, 200);
+
+    return () => clearInterval(interval);
+  }, [loading]);
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -52,13 +88,15 @@ function ResumeAnalyzer() {
       return;
     }
 
+    setLoadingMessageIndex(0);
     setLoading(true);
     setError(null);
+    setProgress(100);
     setAnalysisResult(null);
 
     const formData = new FormData();
     formData.append('resumeFile', resumeFile);
-    
+
     const requestPayload = {
       jobDescription,
       extraSkills: extraSkills
@@ -91,6 +129,8 @@ function ResumeAnalyzer() {
   };
 
   const handleReset = () => {
+    if (!window.confirm("Start a new analysis? Current results will be lost.")) return;
+
     setResumeFile(null);
     setJobDescription('');
     setAnalysisResult(null);
@@ -99,8 +139,15 @@ function ResumeAnalyzer() {
   };
 
   const handlePreviewPDF = () => {
+    if (!analysisResult?.analysisId) return;
     setShowPDFPreview(true);
   };
+
+  useEffect(() => {
+    if (analysisResult) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [analysisResult]);
 
   return (
     <div className="resume-analyzer">
@@ -206,7 +253,7 @@ function ResumeAnalyzer() {
             <h3>Analysis Complete!</h3>
           </div>
 
-          <AnalysisResults data={analysisResult} />
+          <AnalysisResults data={analysisResult} onPreviewPdf={handlePreviewPDF} onReset={handleReset} />
 
           <div className="pdf-generation-section">
             <h3>Generate Tailored Resume</h3>
@@ -256,7 +303,7 @@ function ResumeAnalyzer() {
               ) : (
                 <>
                   <FileSearch size={18} />
-                  Analyze Resume
+                  Analyze Same Resume Again
                 </>
               )}
             </button>
@@ -276,7 +323,14 @@ function ResumeAnalyzer() {
       {loading && (
         <div className="loading-overlay">
           <LoadingSpinner size={50} />
-          <p>Analyzing your resume...</p>
+          <p>{loadingMessages[loadingMessageIndex]}</p>
+
+          <div className="loading-progress">
+            <div
+              className="loading-progress-bar"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
         </div>
       )}
     </div>

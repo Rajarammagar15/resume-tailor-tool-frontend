@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, AlertCircle } from 'lucide-react';
 import PDFPreview from './PDFPreview';
 import LoadingSpinner from './LoadingSpinner';
@@ -52,6 +52,8 @@ function ResumeBuilder() {
   const [showPDFPreview, setShowPDFPreview] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState('MODERN');
   const [certInput, setCertInput] = useState("");
+  const [progress, setProgress] = useState(0);
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
 
   // Skill input states
   const [skillInputs, setSkillInputs] = useState({
@@ -64,6 +66,37 @@ function ResumeBuilder() {
   });
 
   const skillCategories = ["languages", "backend", "databases", "cloud", "tools", "concepts"];
+
+  const loadingMessages = [
+    "Preparing your resume data...",
+    "Structuring professional experience...",
+    "Enhancing project descriptions...",
+    "Optimizing skills section...",
+    "Tailoring resume for job description...",
+    "Applying ATS optimization...",
+    "Formatting resume with selected template...",
+    "Generating your AI-optimized resume..."
+  ];
+
+  useEffect(() => {
+    if (!loading) return;
+
+    setProgress(0);
+    setLoadingMessageIndex(0);
+    let tick = 0;
+    const interval = setInterval(() => {
+      tick++;
+      setProgress((prev) => {
+        if (prev >= 95) return prev;
+        return prev + 1;
+      });
+      if (tick % 13 === 0) {
+        setLoadingMessageIndex((prev) => (prev + 1) % loadingMessages.length);
+      }
+    }, 150);
+    return () => clearInterval(interval);
+  }, [loading]);
+
 
   const updateFormData = (updater) => {
     setFormData(prev => updater(prev));
@@ -300,6 +333,7 @@ function ResumeBuilder() {
 
       const data = await response.json();
 
+      setProgress(100);
       // store analysisId
       setAnalysisId(data.analysisId);
 
@@ -815,7 +849,14 @@ function ResumeBuilder() {
       {loading && (
         <div className="loading-overlay">
           <LoadingSpinner size={50} />
-          <p>Generating your AI-optimized resume...</p>
+          <p>{loadingMessages[loadingMessageIndex]}</p>
+
+          <div className="loading-progress">
+            <div
+              className="loading-progress-bar"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
         </div>
       )}
     </div>

@@ -1,3 +1,4 @@
+/* App.css */
 * {
   margin: 0;
   padding: 0;
@@ -77,9 +78,9 @@ body {
 /* Main Content */
 .main-content {
   flex: 1;
-  max-width: 1200px;
   width: 100%;
-  margin: 0 auto;
+  max-width: 1200px;
+  margin: auto;
   padding: 32px 24px;
 }
 
@@ -225,6 +226,88 @@ body {
   .nav-links {
     width: 100%;
     justify-content: center;
+  }
+
+  .main-content {
+    padding: 24px 16px;
+  }
+}
+
+/* Hamburger button — hidden on desktop */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 101;
+}
+
+.hamburger-line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #475569;
+  border-radius: 2px;
+  transition: all 0.25s ease;
+}
+
+/* Animate into × when open */
+.hamburger-line.open:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-line.open:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-line.open:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: row;
+    /* keep brand + hamburger side by side */
+    height: 60px;
+    padding: 0 20px;
+    position: relative;
+  }
+
+  .hamburger {
+    display: flex;
+    /* show on mobile */
+  }
+
+  /* hidden by default on mobile */
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    padding: 12px 20px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    gap: 6px;
+    z-index: 100;
+  }
+
+  /* shown when toggled */
+  .nav-links.nav-open {
+    display: flex;
+  }
+
+  .nav-links a {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
   }
 
   .main-content {

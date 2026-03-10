@@ -12,32 +12,25 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
   const loadPDF = useCallback(async () => {
     setLoading(true);
     setError(null);
-
     try {
       const response = await fetch(
         `${API_BASE_URL}/api/v1/pdf/${analysisId}?template=${template}`
       );
-
-      if (!response.ok) {
-        throw new Error("Failed to load PDF");
-      }
-
+      if (!response.ok) throw new Error("Failed to load PDF");
       const blob = await response.blob();
-
-      const url = URL.createObjectURL(blob);
-      setPdfUrl(url);
-
+      setPdfUrl(URL.createObjectURL(blob));
     } catch (err) {
       setError(err.message || "Failed to load PDF preview");
     } finally {
       setLoading(false);
     }
-
   }, [analysisId, template]);
 
+  useEffect(() => { loadPDF(); }, [loadPDF]);
+
   useEffect(() => {
-    loadPDF();
-  }, [loadPDF]);
+    return () => { if (pdfUrl) URL.revokeObjectURL(pdfUrl); };
+  }, [pdfUrl]);
 
   const handleDownload = () => {
     if (pdfUrl) {
@@ -50,81 +43,70 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (pdfUrl) {
-        URL.revokeObjectURL(pdfUrl);
-      }
-    };
-  }, [pdfUrl]);
-
   return (
     <div className="pdf-preview-overlay" onClick={onClose}>
       <div className="pdf-preview-modal" onClick={(e) => e.stopPropagation()}>
+
+        {/* Header */}
         <div className="pdf-preview-header">
-          <h3>Resume Preview - {template}</h3>
+          <h3>Resume Preview</h3>
           <div className="header-actions">
             {pdfUrl && (
               <button className="btn btn-primary" onClick={handleDownload}>
-                <Download size={20} />
+                <Download size={16} />
                 Download PDF
               </button>
             )}
             <button className="btn btn-icon" onClick={onClose}>
-              <X size={24} />
+              <X size={20} />
             </button>
           </div>
         </div>
 
-        <div className="pdf-preview-content">
-
-          <div className="template-sidebar">
-            <h4>Templates</h4>
-
+        {/* Template Tab Bar — always horizontal */}
+        <div className="template-tab-bar">
+          <label className="template-tab-label">CHOOSE TEMPLATE : </label>
+          <div className="template-tabs-row">
             {["MODERN", "CORPORATE", "COMPACT"].map((t) => (
               <button
                 key={t}
-                className={`template-sidebar-item ${template === t ? "active" : ""}`}
+                className={`template-tab ${template === t ? "active" : ""}`}
                 onClick={() => onTemplateChange(t)}
               >
                 {t}
               </button>
             ))}
           </div>
-
-          <div className="pdf-viewer-container">
-            {loading && (
-              <div className="pdf-loading">
-                <Loader size={48} className="spinner" />
-                <p>Loading PDF preview...</p>
-              </div>
-            )}
-
-            {error && (
-              <div className="pdf-error">
-                <p>{error}</p>
-                <button className="btn btn-secondary" onClick={loadPDF}>
-                  Retry
-                </button>
-              </div>
-            )}
-
-            {pdfUrl && !loading && (
-              <iframe
-                src={`${pdfUrl}#zoom=page-width`}
-                className="pdf-iframe"
-                title="Resume Preview"
-              />
-            )}
-          </div>
-
         </div>
 
+        {/* PDF Viewer */}
+        <div className="pdf-viewer-container">
+          {loading && (
+            <div className="pdf-loading">
+              <Loader size={40} className="spinner" />
+              <p>Loading preview...</p>
+            </div>
+          )}
+          {error && (
+            <div className="pdf-error">
+              <p>{error}</p>
+              <button className="btn btn-secondary" onClick={loadPDF}>Retry</button>
+            </div>
+          )}
+          {pdfUrl && !loading && (
+            <iframe
+              src={`${pdfUrl}#zoom=page-width`}
+              className="pdf-iframe"
+              title="Resume Preview"
+            />
+          )}
+        </div>
+
+        {/* Footer */}
         <div className="pdf-preview-footer">
-          <p className="footer-hint">
-            Review your resume and download when ready
-          </p>
+          <p className="footer-hint">Review your resume and download when ready</p>
         </div>
+
       </div>
     </div>
   );

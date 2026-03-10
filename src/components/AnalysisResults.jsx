@@ -2,7 +2,27 @@ import React from 'react';
 import { TrendingUp, CheckCircle, XCircle, Lightbulb } from 'lucide-react';
 import './AnalysisResults.css';
 
-function AnalysisResults({ data }) {
+function AnalysisResults({ data, onPreviewPdf, onReset }){
+
+  const overallMatchTooltip = `AI-based evaluation of how well your resume aligns with the job description.
+This score considers experience, projects, skills, and role responsibilities.
+
+Even if some keywords are missing, the AI may still give a high score if your
+overall experience matches the job requirements.
+`;
+
+  const keywordMatchTooltip = `Exact keyword coverage between your resume and the job description.
+
+Example:
+• If the JD mentions Java, Python, and C++
+• There are 3 language keywords
+
+If your resume includes only Java:
+Keyword Match = 1 / 3 = 33%
+
+AI score may still be high if the role requires
+proficiency in any one language.
+`;
 
   const {
     resume,
@@ -42,31 +62,63 @@ function AnalysisResults({ data }) {
   return (
     <div className="analysis-results">
 
+      <div className="floating-action-bar">
+
+        <button
+          className="fab preview-fab"
+          onClick={onPreviewPdf}
+        >
+          <span>📄</span>
+          Preview PDF
+        </button>
+
+        <button
+          className="fab analyze-fab"
+          onClick={onReset}
+        >
+          <span>🔄</span>
+          New Analysis
+        </button>
+      </div>
+
       {/* Score Cards */}
       <div className="score-cards">
-
         {/* AI Score */}
-        <div className="score-card">
-          <div className="score-icon ai-score">
-            <TrendingUp size={32} />
+        <div className="score-card tooltip-card">
+
+          <div className="card-content">
+            <div className="score-icon ai-score">
+              <TrendingUp size={32} />
+            </div>
+
+            <div className="score-details">
+              <h4>Overall Match By AI</h4>
+              <p className="score-value">{aiScore || 0}%</p>
+              <p className="score-label">Resume to Job Fit Score</p>
+            </div>
           </div>
-          <div className="score-details">
-            <h4>Overall Match</h4>
-            <p className="score-value">{aiScore || 0}%</p>
-            <p className="score-label">Resume to Job Fit</p>
-          </div>
+
+          <div className="tooltip-text">{overallMatchTooltip}</div>
+
         </div>
 
         {/* Keyword Score */}
-        <div className="score-card">
-          <div className="score-icon keyword-score">
-            <CheckCircle size={32} />
+        <div className="score-card tooltip-card">
+
+          <div className="card-content">
+            <div className="score-icon keyword-score">
+              <CheckCircle size={32} />
+            </div>
+
+            <div className="score-details">
+              <h4>Keyword Coverage</h4>
+              <p className="score-value">{keywordScore || 0}%</p>
+              <p className="score-label">Exact JD Keyword Coverage</p>
+            </div>
           </div>
-          <div className="score-details">
-            <h4>Keyword Match</h4>
-            <p className="score-value">{keywordScore || 0}%</p>
-            <p className="score-label">JD Keyword Coverage</p>
-          </div>
+
+          <div className="tooltip-text">{keywordMatchTooltip}</div>
+
         </div>
 
         {/* Experience Count */}
@@ -80,8 +132,10 @@ function AnalysisResults({ data }) {
             <p className="score-label">Years of Experience</p>
           </div>
         </div>
-
       </div>
+      <p className="score-info">
+        💡 AI Match evaluates overall experience relevance, while Keyword Coverage measures exact keyword presence in your resume.
+      </p>
 
       {/* Skills Section */}
       <div className="skills-analysis-wrapper">

@@ -455,3 +455,19 @@ input[type="month"]::-webkit-calendar-picker-indicator{
   padding:20px;
   background:#f8fafc;
 }
+
+.loading-progress {
+  width: 260px;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.loading-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#6366f1,#8b5cf6);
+  transition: width 0.2s linear;
+}

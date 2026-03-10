@@ -1,133 +1,272 @@
-# AI Resume Tailor - React Frontend
+# AI Resume Tailor – React Frontend
 
-A modern, responsive React application for AI-powered resume analysis and building with PDF generation capabilities.
+AI Resume Tailor is a modern web application that helps job seekers analyze, optimize, and generate ATS-friendly resumes using AI.
 
-## 🎯 Features
+The platform allows users to upload an existing resume, compare it against a job description, identify skill gaps, and generate tailored resumes using professional templates.
 
-### 1. Resume Analyzer
-- Upload existing resume (PDF)
+This repository contains the **React frontend** for the AI Resume Tailor application.
+
+---
+
+## Live Demo
+
+Frontend  
+https://ai-resume-tailor.vercel.app
+
+Backend  
+Spring Boot REST API
+
+---
+
+## Overview
+
+AI Resume Tailor provides two main workflows:
+
+1. Resume Analyzer – analyze an existing resume against a job description.  
+2. Resume Builder – create a new resume from scratch with AI-assisted optimization.
+
+The goal of the application is to help job seekers improve their resumes for **ATS systems and recruiter expectations**.
+
+---
+
+## Resume Analyzer
+
+The Resume Analyzer allows users to upload a resume and compare it with a specific job description.
+
+The application performs an AI-based analysis and generates insights including skill matching, experience summaries, and improvement suggestions.
+
+Users can also generate a tailored resume PDF based on the analysis.
+
+### Features
+
+- Upload resume (PDF)
 - Paste job description
-- Get AI-powered analysis with:
-  - Overall match score
-  - Skills breakdown
-  - Experience highlights
-  - Project summaries
-- Generate tailored PDF in 3 templates (Modern, Corporate, Compact)
-- Live PDF preview before download
+- AI-powered resume analysis
+- ATS compatibility insights
+- Skill match detection
+- Experience highlights
+- Project summaries
+- Resume improvement suggestions
+- Generate optimized resume PDF
 
-### 2. Resume Builder
-- Build resume from scratch with intuitive form
-- AI-optimized content generation
-- Sections: Personal Info, Skills, Experience, Projects, Education, Certifications
+### Screenshot
+
+![Resume Analyzer](screenshots/resume-analyzer.png)
+![Analyzer Result](screenshots/analyzer-result.png)
+
+---
+
+## Resume Builder
+
+The Resume Builder allows users to create a resume from scratch using an intuitive form-based interface.
+
+Users can enter their details, skills, experience, projects, and education, and the system will generate a professional resume.
+
+Optional job descriptions can be provided to tailor the resume content for specific roles.
+
+### Features
+
+- Personal information section
+- Skills management
+- Experience entries
+- Project entries
+- Education details
+- Certifications section
 - Dynamic form fields (add/remove entries)
-- Job description targeting for AI optimization
-- Template selection
-- Live PDF preview
+- Job description targeting
+- AI optimized content
+- Resume generation with templates
 
-## 🚀 Tech Stack
+### Screenshot
 
-- **React 18** - UI library
-- **React Router DOM** - Client-side routing
-- **Lucide React** - Icon library
-- **CSS3** - Styling with modern features
+![Resume Builder](screenshots/resume-builder.png)
 
-## 📦 Installation
+
+## Resume Templates
+
+The application supports multiple resume templates that can be used to generate professional resumes.
+
+Available templates include:
+
+- Modern
+- Corporate
+- Compact
+
+Users can preview the generated resume before downloading the final PDF.
+
+### Screenshot
+![PDF Preview](screenshots/pdf-preview.png)
+
+
+---
+
+## Tech Stack
+
+The frontend is built using modern web technologies.
+
+**Frontend**
+
+React 18  
+React Router DOM  
+Lucide React (icon library)  
+CSS3 (custom responsive styling)
+
+**Backend (separate repository)**
+
+Java  
+Spring Boot  
+REST APIs  
+AI / LLM integration  
+PDF generation service
+
+---
+
+## Installation
 
 ### Prerequisites
-- Node.js 16+ and npm
-- Backend server running on `http://localhost:8080`
 
-### Setup Steps
+Make sure the following tools are installed on your system.
 
-1. **Clone/Download the project**
-```bash
-cd resume-tailor-frontend
-```
+Node.js version 16 or higher  
+npm
 
-2. **Install dependencies**
-```bash
+The backend service should be running locally at: http://localhost:8080/
+
+---
+
+### Clone the Repository
+git clone https://github.com/yourusername/ai-resume-tailor-frontend.git
+cd ai-resume-tailor-frontend
+
+---
+
+### Install Dependencies
 npm install
+
+---
+
+### Run Development Server
+npm run dev
+
+The application will run at: http://localhost:5173
+
+---
+
+## Project Structure
 ```
-
-3. **Start development server**
-```bash
-npm start
-```
-
-The app will open at `http://localhost:3000`
-
-## 🏗️ Project Structure
-
-```
-ai-resume-tailor-frontend/
-├── public/
-│   └── index.html
-├── src/
-│   ├── components/
-│   │   ├── ResumeAnalyzer.jsx
-│   │   ├── ResumeAnalyzer.css
-│   │   ├── ResumeBuilder.jsx
-│   │   ├── ResumeBuilder.css
-│   │   ├── PDFPreview.jsx
-│   │   ├── PDFPreview.css
-│   │   ├── AnalysisResults.jsx
-│   │   ├── AnalysisResults.css
-│   │   ├── LoadingSpinner.jsx
-│   │   └── LoadingSpinner.css
-│   ├── App.jsx
-│   ├── App.css
-│   └── index.js
+ai-resume-tailor-frontend
+│
+├── public
+│ └── index.html
+│
+├── src
+│ ├── components
+│ │ ├── ResumeAnalyzer.jsx
+│ │ ├── ResumeAnalyzer.css
+│ │ ├── ResumeBuilder.jsx
+│ │ ├── ResumeBuilder.css
+│ │ ├── AnalysisResults.jsx
+│ │ ├── AnalysisResults.css
+│ │ ├── PDFPreview.jsx
+│ │ ├── PDFPreview.css
+│ │ ├── LoadingSpinner.jsx
+│ │ └── LoadingSpinner.css
+│ │
+│ ├── App.jsx
+│ ├── App.css
+│ └── index.js
+│
 ├── package.json
 └── README.md
 ```
 
-## 🔌 API Integration
+---
 
-### Backend Endpoints Used
+## API Integration
 
-#### 1. Analyze Resume
-```
+The frontend communicates with a Spring Boot backend using REST APIs.
+
+### Resume Analysis
 POST /api/v1/analyze
-Content-Type: multipart/form-data
 
-Parameters:
-- resumeFile: PDF file
-- jobDescription: String
 
-Response:
+Parameters
+
+- resumeFile (PDF)
+- jobDescription (String)
+
+Example Response
 {
-  "analysisId": "uuid-string",
-  "resume": {
-    "header": { ... },
-    "summary": "string",
-    "skills": { ... },
-    "experience": [ ... ],
-    "projects": [ ... ],
-    "education": [ ... ],
-    "certifications": [ ... ]
-  }
+"analysisId": "uuid",
+"resume": {
+"header": {},
+"summary": "",
+"skills": {},
+"experience": [],
+"projects": [],
+"education": [],
+"certifications": []
 }
-```
+}
 
-#### 2. Generate Resume from Builder
-```
+---
+
+### Resume Generation
 POST /resume/generate
-Content-Type: application/json
 
-Body: ResumeBuilderRequest (see below)
+Request Body
 
-Response:
+Example Response
+
 {
-  "analysisId": "uuid-string",
-  "resume": { ... }
+"analysisId": "uuid",
+"resume": { ... }
 }
-```
 
-#### 3. Get PDF
-```
+---
+
+### Resume PDF Generation
+
 GET /api/v1/pdf/{analysisId}?template={MODERN|CORPORATE|COMPACT}
 
-Response: PDF file (application/pdf)
-```
+Response
+application/pdf
 
-**Built with ❤️ using React and Spring Boot**
+---
+
+
+## Responsive Design
+
+The frontend is fully responsive and optimized for:
+
+Desktop devices  
+Tablets  
+Mobile phones
+
+---
+
+## Future Improvements
+
+Possible future improvements include:
+
+- Resume keyword highlighting
+- Resume scoring visualization
+- LinkedIn profile import
+- Additional resume templates
+- Resume history tracking
+
+---
+
+## Disclaimer
+
+This repository contains a personal project developed independently for learning and experimentation purposes.
+
+This project is not affiliated with, endorsed by, or representing any employer or client organization of the author.
+
+No proprietary code, confidential information, or internal resources from any employer were used in the development of this project.
+
+All code and content in this repository are the author's own work.
+
+---
+
+Built with ❤️ using React and Spring Boot
