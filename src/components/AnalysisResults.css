@@ -585,3 +585,57 @@
     box-shadow: 0 6px 20px rgba(0,0,0,0.25);
   }
 }
+
+@media (max-width: 768px) {
+  .score-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr; 
+  }
+
+  .skill-tags-display {
+    gap: 8px;
+  }
+
+  .skill-tag-display {
+    padding: 8px 12px;
+    font-size: 13px;
+    word-break: break-word; 
+  }
+
+  .skill-category-card {
+    padding: 16px;
+    min-width: 0;   
+  }
+
+  .exp-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .exp-duration {
+    align-self: flex-start;
+  }
+
+  .projects-list {
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-results {
+    overflow-x: hidden;
+  }
+
+  .skills-section,
+  .skills-analysis-wrapper,
+  .skill-match-progress {
+    min-width: 0;
+  }
+}
