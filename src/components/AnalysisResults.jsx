@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TrendingUp, CheckCircle, XCircle, Lightbulb } from 'lucide-react';
 import './AnalysisResults.css';
 
@@ -29,16 +29,61 @@ proficiency in any one language.
     aiScore,
     keywordScore,
     matchedSkills,
-    missingSkills,
     suggestions
   } = data;
 
+  const [missingSkillsState, setMissingSkillsState] = useState(data?.missingSkills || []);
+  const [updatedSkills, setUpdatedSkills] = useState(resume?.skills || {});
+  const [skillsModified, setSkillsModified] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const totalSkills =
-    (matchedSkills?.length || 0) + (missingSkills?.length || 0);
+    (matchedSkills?.length || 0) + (missingSkillsState?.length || 0);
 
   const matchPercentage = totalSkills
     ? Math.round((matchedSkills.length / totalSkills) * 100)
     : 0;
+
+
+  const handleSkillDrop = (e, category) => {
+    const skill = e.dataTransfer.getData("skill");
+
+    setUpdatedSkills(prev => {
+      const existing = prev[category] || [];
+
+      if (existing.includes(skill)) return prev;
+
+      return {
+        ...prev,
+        [category]: [...existing, skill]
+      };
+    });
+
+    setMissingSkillsState(prev =>
+      prev.filter(s => s !== skill)
+    );
+    setSkillsModified(true);
+  };
+
+  const handleSkillAdd = (skill, category) => {
+
+    setUpdatedSkills(prev => {
+      const existing = prev[category] || [];
+
+      if (existing.includes(skill)) return prev;
+
+      return {
+        ...prev,
+        [category]: [...existing, skill]
+      };
+    });
+
+    setMissingSkillsState(prev =>
+      prev.filter(s => s !== skill)
+    );
+
+    setSkillsModified(true);
+  };
 
   function calculateExperienceYears(experience) {
     if (!experience) return 0;
@@ -66,7 +111,7 @@ proficiency in any one language.
 
         <button
           className="fab preview-fab"
-          onClick={onPreviewPdf}
+          onClick={() => onPreviewPdf(updatedSkills, skillsModified)}
         >
           <span>📄</span>
           Preview PDF
@@ -155,7 +200,7 @@ proficiency in any one language.
           </div>
 
           <p className="progress-meta">
-            {matchedSkills?.length || 0} matched • {missingSkills?.length || 0} missing
+            {matchedSkills?.length || 0} matched • {missingSkillsState?.length || 0} missing
           </p>
         </div>
 
@@ -174,16 +219,57 @@ proficiency in any one language.
         )}
 
         {/* Missing Skills */}
-        {missingSkills && missingSkills.length > 0 && (
+        {missingSkillsState.length > 0 && (
           <div className="skills-section">
             <h3>Missing Skills</h3>
+
+            <p className="skill-hint">
+              💡 Drag a skill into a category or tap to add it
+            </p>
             <div className="skill-tags-display">
-              {missingSkills.map((skill, index) => (
-                <span key={index} className="skill-tag-display missing">
+              {missingSkillsState.map((skill, index) => (
+                <span
+                  key={index}
+                  className="skill-tag-display missing"
+                  draggable
+                  onDragStart={(e) => e.dataTransfer.setData("skill", skill)}
+                  onClick={() => {
+                    setSelectedCategory(skill);
+                    setTimeout(() => {
+                      document.querySelector(".category-selector")?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                      });
+                    }, 100);
+                  }}
+                >
                   {skill}
+                  <span className="add-icon">+</span>
                 </span>
               ))}
             </div>
+            {selectedCategory && (
+              <div className="category-selector">
+
+                <h4>Add "{selectedCategory}" to</h4>
+
+                <div className="category-buttons">
+                  {Object.keys(updatedSkills).map((category) => (
+                    <button
+                      key={category}
+                      className="category-btn"
+                      onClick={() => {
+                        handleSkillAdd(selectedCategory, category);
+                        setSelectedCategory(null);
+                      }}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -193,9 +279,14 @@ proficiency in any one language.
         <div className="skills-section">
           <h3>Skills in Resume</h3>
           <div className="skills-grid">
-            {Object.entries(resume.skills).map(([category, skills]) => (
+            {Object.entries(updatedSkills).map(([category, skills]) => (
               skills.length > 0 && (
-                <div key={category} className="skill-category-card">
+                <div
+                  key={category}
+                  className="skill-category-card"
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => handleSkillDrop(e, category)}
+                >
                   <h4>{category.charAt(0).toUpperCase() + category.slice(1)}</h4>
                   <div className="skill-tags-display">
                     {skills.map((skill, index) => (

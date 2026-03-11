@@ -166,14 +166,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  align-items: flex-start;
 }
 
 .skill-tag-display {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 16px;
   font-size: 14px;
   border-radius: 20px;
   font-weight: 600;
-  display: inline-block;
   transition: all 0.2s ease;
 }
 
@@ -189,14 +192,23 @@
 }
 
 .skill-tag-display.missing {
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  background: #fff4e5;
+  border: 1px solid #f59e0b;
   color: #92400e;
-  border: 1px solid #fbbf24;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: grab;
+  white-space: nowrap;
 }
 
 .skill-tag-display.missing:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.skill-tag-display.missing:active {
+  cursor: grabbing;
 }
 
 .skill-tag-display:not(.matched):not(.missing) {
@@ -511,7 +523,7 @@
   transform: translateY(10px);
   transition: all 0.2s ease;
 
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .tooltip-card:hover .tooltip-text {
@@ -547,23 +559,68 @@
   font-size: 14px;
   cursor: pointer;
   min-width: 110px;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
   transition: all 0.25s ease;
 }
 
 .preview-fab {
-  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
 }
 
 .analyze-fab {
-  background: linear-gradient(135deg,#10b981,#059669);
+  background: linear-gradient(135deg, #10b981, #059669);
   color: white;
 }
 
 .fab:hover {
   transform: translateX(-6px);
-  box-shadow: 0 16px 30px rgba(0,0,0,0.28);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.28);
+}
+
+.add-icon {
+  margin-left: 6px;
+  font-weight: bold;
+}
+
+.skill-hint {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.category-selector {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+.category-selector h4 {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.category-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #6366f1;
+  background: white;
+  color: #6366f1;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.category-btn:hover {
+  background: #6366f1;
+  color: white;
 }
 
 @media (max-width: 768px) {
@@ -572,7 +629,7 @@
     bottom: 24px;
     right: 20px;
     top: auto;
-    transform: none;        /* remove the translateX centering */
+    transform: none;
     flex-direction: column;
     gap: 10px;
     z-index: 999;
@@ -582,7 +639,7 @@
     font-size: 13px;
     padding: 10px 14px;
     min-width: 130px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   }
 }
 
@@ -602,18 +659,20 @@
   }
 
   .skill-tags-display {
-    gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .skill-tag-display {
-    padding: 4px 4px;
-    font-size: 10px;
-    word-break: break-word; 
+    padding: 6px 12px;
+    font-size: 12px;
+    white-space: nowrap;
   }
 
   .skill-category-card {
     padding: 16px;
-    min-width: 0;   
+    min-width: 0;
   }
 
   .exp-header {

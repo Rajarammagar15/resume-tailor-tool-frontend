@@ -142,8 +142,14 @@ function ResumeAnalyzer() {
     setShowPDFPreview(false);
   };
 
-  const handlePreviewPDF = () => {
+  const [previewData, setPreviewData] = useState(null);
+
+  const handlePreviewPDF = (skills, modified) => {
     if (!analysisResult?.analysisId) return;
+    setPreviewData({
+      skills,
+      modified
+    });
     setShowPDFPreview(true);
   };
 
@@ -257,8 +263,11 @@ function ResumeAnalyzer() {
             <h3>Analysis Complete!</h3>
           </div>
 
-          <AnalysisResults data={analysisResult} onPreviewPdf={handlePreviewPDF} onReset={handleReset} />
-
+          <AnalysisResults
+            data={analysisResult}
+            onPreviewPdf={handlePreviewPDF}
+            onReset={handleReset}
+          />
           <div className="pdf-generation-section">
             <h3>Generate Tailored Resume</h3>
             <p>Choose a template to generate your optimized resume</p>
@@ -291,7 +300,7 @@ function ResumeAnalyzer() {
           <div className="result-actions">
             <button
               className="btn btn-primary btn-large"
-              onClick={handlePreviewPDF}
+              onClick={() => handlePreviewPDF(analysisResult?.resume?.skills, false)}
             >
               <Download size={18} />
               Preview & Download PDF
@@ -319,6 +328,8 @@ function ResumeAnalyzer() {
         <PDFPreview
           analysisId={analysisResult.analysisId}
           template={selectedTemplate}
+          skills={previewData?.skills}
+          skillsModified={previewData?.modified}
           onTemplateChange={setSelectedTemplate}
           onClose={() => setShowPDFPreview(false)}
         />

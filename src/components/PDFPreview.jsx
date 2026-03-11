@@ -5,7 +5,14 @@ import { track } from "@vercel/analytics";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
-function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
+function PDFPreview({
+  analysisId,
+  template,
+  skills,
+  skillsModified,
+  onTemplateChange,
+  onClose
+}) {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,17 +30,36 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
   const loadPDF = useCallback(async () => {
     setLoading(true);
     setError(null);
+
     try {
-      const url = `${API_BASE_URL}/api/v1/pdf/${analysisId}?template=${template}`;
-      setPdfUrl(url);
+      if (!skillsModified) {
+        const url = `${API_BASE_URL}/api/v1/pdf/${analysisId}?template=${template}`;
+        setPdfUrl(url);
+      } else {
+        const response = await fetch(`${API_BASE_URL}/api/v1/pdf/update`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            analysisId,
+            template,
+            skills
+          })
+        });
+        const blob = await response.blob();
+        setPdfUrl(URL.createObjectURL(blob));
+      }
     } catch (err) {
       setError("Failed to load PDF preview");
     } finally {
       setLoading(false);
     }
-  }, [analysisId, template]);
+  }, [analysisId, template, skillsModified, skills]);
+
 
   useEffect(() => { loadPDF(); }, [loadPDF]);
+
 
   useEffect(() => {
     return () => { if (pdfUrl) URL.revokeObjectURL(pdfUrl); };
