@@ -2,7 +2,7 @@ import React from 'react';
 import { TrendingUp, CheckCircle, XCircle, Lightbulb } from 'lucide-react';
 import './AnalysisResults.css';
 
-function AnalysisResults({ data, onPreviewPdf, onReset }){
+function AnalysisResults({ data, onPreviewPdf, onReset }) {
 
   const overallMatchTooltip = `AI-based evaluation of how well your resume aligns with the job description.
 This score considers experience, projects, skills, and role responsibilities.
@@ -188,15 +188,6 @@ proficiency in any one language.
         )}
       </div>
 
-      {/* Resume Summary */}
-      {resume?.summary && (
-        <div className="summary-section">
-          <h3>Professional Summary</h3>
-          <p className="summary-text">{resume.summary}</p>
-        </div>
-      )}
-
-
       {/* Skills Breakdown */}
       {resume?.skills && (
         <div className="skills-section">
@@ -235,6 +226,14 @@ proficiency in any one language.
         </div>
       )}
 
+
+      {/* Resume Summary */}
+      {resume?.summary && (
+        <div className="summary-section">
+          <h3>Professional Summary</h3>
+          <p className="summary-text">{resume.summary}</p>
+        </div>
+      )}
 
       {resume?.experience?.filter(exp => exp && exp.role)?.length > 0 && (
         <div className="experience-section">

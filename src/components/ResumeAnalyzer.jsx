@@ -4,6 +4,7 @@ import PDFPreview from './PDFPreview';
 import AnalysisResults from './AnalysisResults';
 import LoadingSpinner from './LoadingSpinner';
 import './ResumeAnalyzer.css';
+import { track } from "@vercel/analytics";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -47,7 +48,7 @@ function ResumeAnalyzer() {
       if (tick % 10 === 0) {
         setLoadingMessageIndex((prev) => (prev + 1) % loadingMessages.length);
       }
-    }, 200);
+    }, 300);
 
     return () => clearInterval(interval);
   }, [loading]);
@@ -88,6 +89,7 @@ function ResumeAnalyzer() {
       return;
     }
 
+    track("resume_generate_clicked");
     setLoadingMessageIndex(0);
     setLoading(true);
     setError(null);
@@ -121,6 +123,8 @@ function ResumeAnalyzer() {
 
       const data = await response.json();
       setAnalysisResult(data);
+
+      track("resume_generated");
     } catch (err) {
       setError(err.message || 'An error occurred during analysis');
     } finally {

@@ -598,7 +598,7 @@
   }
 
   .skills-grid {
-    grid-template-columns: 1fr; 
+    grid-template-columns: 1fr;
   }
 
   .skill-tags-display {
@@ -606,8 +606,8 @@
   }
 
   .skill-tag-display {
-    padding: 8px 12px;
-    font-size: 13px;
+    padding: 4px 4px;
+    font-size: 10px;
     word-break: break-word; 
   }
 

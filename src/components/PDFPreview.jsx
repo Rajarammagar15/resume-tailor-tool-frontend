@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { X, Download, Loader } from 'lucide-react';
 import './PDFPreview.css';
+import { track } from "@vercel/analytics";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -8,6 +9,11 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   const loadPDF = useCallback(async () => {
     setLoading(true);
@@ -34,6 +40,8 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
       a.href = pdfUrl;
       a.download = `resume_${template.toLowerCase()}.pdf`;
       a.click();
+      
+      track("pdf_downloaded");
     }
   };
 
@@ -41,6 +49,11 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
     <div className="pdf-preview-overlay" onClick={onClose}>
       <div className="pdf-preview-modal" onClick={(e) => e.stopPropagation()}>
 
+        {isMobile && (
+          <div className="mobile-warning">
+            <p>Mobile browser may not support PDF preview, Click Open or Download to view in another tab.</p>
+          </div>
+        )}
         {/* Header */}
         <div className="pdf-preview-header">
           <h3>Resume Preview</h3>
