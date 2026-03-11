@@ -11,7 +11,7 @@ function FeedbackButton() {
 
   return (
     <button className="feedback-button" onClick={openFeedback}>
-      💡 Feedback
+      💡 Drop Your Feedback
     </button>
   );
 }

@@ -5,7 +5,6 @@ import ResumeBuilder from './components/ResumeBuilder';
 import './App.css';
 import HomePage from './components/HomePage';
 import Footer from './components/Footer';
-import FeedbackButton from './components/FeedbackButton';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -72,7 +71,6 @@ function App() {
             <Route path="/build" element={<ResumeBuilder />} />
           </Routes>
         </main>
-        <FeedbackButton />
         <Footer />
       </div>
     </Router>

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./HomePage.css";
+import FeedbackButton from "./FeedbackButton";
 
 function HomePage() {
     return (
@@ -155,7 +156,7 @@ function HomePage() {
                     </div>
                 </div>
             </section>
-
+            <FeedbackButton />
         </div>
     );
 }
