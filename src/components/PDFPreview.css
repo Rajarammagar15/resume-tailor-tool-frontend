@@ -25,8 +25,15 @@
 }
 
 @keyframes modalFade {
-  from { transform: translateY(10px) scale(.98); opacity: 0; }
-  to   { transform: translateY(0) scale(1); opacity: 1; }
+  from {
+    transform: translateY(10px) scale(.98);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
 /* Header */
@@ -129,13 +136,22 @@
 }
 
 .pdf-loading p,
-.pdf-error p { font-size: 15px; }
+.pdf-error p {
+  font-size: 15px;
+}
 
-.spinner { animation: spin 1s linear infinite; }
+.spinner {
+  animation: spin 1s linear infinite;
+}
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Footer */
@@ -170,7 +186,7 @@
   }
 
   .pdf-preview-header {
-    padding: 0px 10px;
+    padding: 10px 16px;
   }
 
   .pdf-preview-header h3 {
@@ -216,16 +232,26 @@
     font-size: 12px;
     color: #94a3b8;
   }
-}
 
-.mobile-warning {
-  background: #fffbeb;
-  border: 1px solid #fcd34d;
-  color: #92400e;
-  padding: 8px 12px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 600;
+  .mobile-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    gap: 14px;
+    padding: 24px;
+  }
+
+  .mobile-preview-icon {
+    font-size: 48px;
+    opacity: 0.8;
+  }
+
+  .mobile-preview-text {
+    color: #64748b;
+    font-size: 14px;
+    max-width: 280px;
+  }
 }

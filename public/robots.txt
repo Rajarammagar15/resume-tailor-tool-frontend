@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ats-resume-ai-tool.vercel.app/sitemap.xml

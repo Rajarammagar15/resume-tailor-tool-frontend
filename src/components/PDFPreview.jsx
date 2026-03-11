@@ -12,7 +12,12 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+    return () => window.removeEventListener("resize", checkDevice);
   }, []);
 
   const loadPDF = useCallback(async () => {
@@ -40,7 +45,7 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
       a.href = pdfUrl;
       a.download = `resume_${template.toLowerCase()}.pdf`;
       a.click();
-      
+
       track("pdf_downloaded");
     }
   };
@@ -49,11 +54,6 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
     <div className="pdf-preview-overlay" onClick={onClose}>
       <div className="pdf-preview-modal" onClick={(e) => e.stopPropagation()}>
 
-        {isMobile && (
-          <div className="mobile-warning">
-            <p>Mobile browser may not support PDF preview, Click Open or Download to view in another tab.</p>
-          </div>
-        )}
         {/* Header */}
         <div className="pdf-preview-header">
           <h3>Resume Preview</h3>
@@ -100,12 +100,35 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
               <button className="btn btn-secondary" onClick={loadPDF}>Retry</button>
             </div>
           )}
+
           {pdfUrl && !loading && (
-            <iframe
-              src={`${pdfUrl}#zoom=page-width`}
-              className="pdf-iframe"
-              title="Resume Preview"
-            />
+            <>
+              {!isMobile ? (
+                <iframe
+                  src={`${pdfUrl}#zoom=page-width`}
+                  className="pdf-iframe"
+                  title="Resume Preview"
+                />
+              ) : (
+                <div className="mobile-preview">
+                  <div className="mobile-preview-icon">📄</div>
+
+                  <h4>Your Resume is Ready</h4>
+
+                  <p className="mobile-preview-text">
+                    Preview may not be supported on this mobile browser.
+                    Please click <b>Open</b> or <b>Download</b>.
+                  </p>
+
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => window.open(pdfUrl, "_blank")}
+                  >
+                    Open Resume
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
 
