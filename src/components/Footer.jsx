@@ -69,6 +69,13 @@ function Footer() {
 
       </div>
 
+      <a
+        href="https://ats-resume-ai-tool.canny.io/feedback"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        💬 Give Your Feedback
+      </a>
       <div className="footer-bottom">
         © {new Date().getFullYear()} AI Resume Tailor. All rights reserved.
       </div>

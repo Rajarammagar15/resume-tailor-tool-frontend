@@ -13,14 +13,10 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/pdf/${analysisId}?template=${template}`
-      );
-      if (!response.ok) throw new Error("Failed to load PDF");
-      const blob = await response.blob();
-      setPdfUrl(URL.createObjectURL(blob));
+      const url = `${API_BASE_URL}/api/v1/pdf/${analysisId}?template=${template}`;
+      setPdfUrl(url);
     } catch (err) {
-      setError(err.message || "Failed to load PDF preview");
+      setError("Failed to load PDF preview");
     } finally {
       setLoading(false);
     }
@@ -37,9 +33,7 @@ function PDFPreview({ analysisId, template, onTemplateChange, onClose }) {
       const a = document.createElement('a');
       a.href = pdfUrl;
       a.download = `resume_${template.toLowerCase()}.pdf`;
-      document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
     }
   };
 

@@ -261,8 +261,20 @@ function ResumeBuilder() {
       return false;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.header.email.trim()) {
       setError("Email is required");
+      return false;
+    }
+    if (!emailRegex.test(formData.header.email)) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+
+    const totalSkills = Object.values(formData.skills)
+      .reduce((sum, arr) => sum + arr.length, 0);
+    if (totalSkills < 3) {
+      setError("Please add at least 3 skills.");
       return false;
     }
 
@@ -429,7 +441,7 @@ function ResumeBuilder() {
 
         {/* Skills Section */}
         <section className="form-section">
-          <h3>Skills</h3>
+          <h3>Skills *</h3>
 
           <div className="skills-grid">
             {skillCategories.map((category) => (

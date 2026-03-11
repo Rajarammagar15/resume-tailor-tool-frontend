@@ -31,10 +31,10 @@ function HomePage() {
 
             {/* TRUST INDICATORS */}
             <section className="trust">
-                <div className="trust-item">⚡ AI Powered Analysis</div>
-                <div className="trust-item">🔒 Privacy First</div>
-                <div className="trust-item">📄 ATS Optimized</div>
-                <div className="trust-item">👨‍💻 Built by Software Engineer</div>
+                <div className="trust-item">AI Powered Analysis</div>
+                <div className="trust-item">Privacy First</div>
+                <div className="trust-item">ATS Optimized</div>
+                <div className="trust-item">Built by Software Engineer</div>
             </section>
 
             {/* HOW IT WORKS
@@ -109,7 +109,7 @@ function HomePage() {
                 <div className="result-cards">
 
                     <div className="result-card before">
-                        <h3>❌ Before Optimization</h3>
+                        <h3>Before Optimization</h3>
                         <ul>
                             <li>Generic experience descriptions</li>
                             <li>Missing important keywords</li>
@@ -118,7 +118,7 @@ function HomePage() {
                     </div>
 
                     <div className="result-card after">
-                        <h3>✅ After Optimization</h3>
+                        <h3>After Optimization</h3>
                         <ul>
                             <li>Strong action-driven bullet points</li>
                             <li>Relevant job keywords included</li>
