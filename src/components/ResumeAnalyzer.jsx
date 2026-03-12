@@ -48,7 +48,7 @@ function ResumeAnalyzer() {
       if (tick % 10 === 0) {
         setLoadingMessageIndex((prev) => (prev + 1) % loadingMessages.length);
       }
-    }, 300);
+    }, 500);
 
     return () => clearInterval(interval);
   }, [loading]);
