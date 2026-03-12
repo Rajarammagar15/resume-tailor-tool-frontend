@@ -93,7 +93,7 @@ function ResumeAnalyzer() {
     setLoadingMessageIndex(0);
     setLoading(true);
     setError(null);
-    setProgress(100);
+    setProgress(0);
     setAnalysisResult(null);
 
     const formData = new FormData();
