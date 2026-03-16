@@ -667,7 +667,11 @@
   .skill-tag-display {
     padding: 6px 12px;
     font-size: 12px;
-    white-space: nowrap;
+    white-space: normal;
+    max-width: 100%;
+    word-break: break-word;
+    align-items: flex-start;
+    overflow-wrap: anywhere;
   }
 
   .skill-category-card {
@@ -697,4 +701,23 @@
   .skill-match-progress {
     min-width: 0;
   }
+}
+
+.removable {
+  position: relative;
+  padding-right: 18px;
+}
+
+.remove-skill {
+  border: none;
+  background: none;
+  color: #888;
+  font-size: 12px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+.remove-skill:hover {
+  color: red;
+  font-weight: 1000;
 }

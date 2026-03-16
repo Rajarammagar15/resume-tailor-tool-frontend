@@ -85,6 +85,20 @@ proficiency in any one language.
     setSkillsModified(true);
   };
 
+  const handleSkillRemove = (skill, category) => {
+    setUpdatedSkills(prev => ({
+      ...prev,
+      [category]: prev[category].filter(s => s !== skill)
+    }));
+
+    setMissingSkillsState(prev => {
+      if (prev.includes(skill)) return prev;
+      return [...prev, skill];
+    });
+
+    setSkillsModified(true);
+  };
+
   function calculateExperienceYears(experience) {
     if (!experience) return 0;
 
@@ -278,6 +292,10 @@ proficiency in any one language.
       {resume?.skills && (
         <div className="skills-section">
           <h3>Skills in Resume</h3>
+
+          <p className="skill-hint">
+            💡 Tap on cross to remove skill from specific category
+          </p>
           <div className="skills-grid">
             {Object.entries(updatedSkills).map(([category, skills]) => (
               skills.length > 0 && (
@@ -290,8 +308,18 @@ proficiency in any one language.
                   <h4>{category.charAt(0).toUpperCase() + category.slice(1)}</h4>
                   <div className="skill-tags-display">
                     {skills.map((skill, index) => (
-                      <span key={index} className="skill-tag-display">
+                      <span key={index} className="skill-tag-display removable">
                         {skill}
+                        
+                        <button
+                          className="remove-skill"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSkillRemove(skill, category);
+                          }}
+                        >
+                          ✕
+                        </button>
                       </span>
                     ))}
                   </div>
