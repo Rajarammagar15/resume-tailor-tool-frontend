@@ -24,24 +24,39 @@ AI score may still be high if the role requires
 proficiency in any one language.
 `;
 
-  const {
-    resume,
-    aiScore,
-    keywordScore,
-    matchedSkills,
-    suggestions
-  } = data;
+  console.log("AnalysisResults data:", data);
 
-  const [missingSkillsState, setMissingSkillsState] = useState(data?.missingSkills || []);
-  const [updatedSkills, setUpdatedSkills] = useState(resume?.skills || {});
+  const {
+    resume = {},
+    aiScore = 0,
+    keywordScore = 0,
+    matchedSkills = [],
+    suggestions = []
+  } = data || {};
+
+  const [missingSkillsState, setMissingSkillsState] = useState(data?.missingSkills ?? []);
   const [skillsModified, setSkillsModified] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const normalizeSkills = (skillsObj = {}) => {
+    const normalized = {};
+
+    Object.entries(skillsObj).forEach(([key, value]) => {
+      normalized[key] = Array.isArray(value) ? value : [];
+    });
+
+    return normalized;
+  };
+
+  const [updatedSkills, setUpdatedSkills] = useState(
+    normalizeSkills(resume?.skills)
+  );
 
   const totalSkills =
     (matchedSkills?.length || 0) + (missingSkillsState?.length || 0);
 
   const matchPercentage = totalSkills
-    ? Math.round((matchedSkills.length / totalSkills) * 100)
+    ? Math.round(((matchedSkills?.length || 0) / totalSkills) * 100)
     : 0;
 
 
@@ -297,8 +312,8 @@ proficiency in any one language.
             💡 Tap on cross to remove skill from specific category
           </p>
           <div className="skills-grid">
-            {Object.entries(updatedSkills).map(([category, skills]) => (
-              skills.length > 0 && (
+            {Object.entries(updatedSkills || {}).map(([category, skills]) => (
+              Array.isArray(skills) && skills.length > 0 && (
                 <div
                   key={category}
                   className="skill-category-card"
@@ -307,10 +322,10 @@ proficiency in any one language.
                 >
                   <h4>{category.charAt(0).toUpperCase() + category.slice(1)}</h4>
                   <div className="skill-tags-display">
-                    {skills.map((skill, index) => (
+                    {Array.isArray(skills) && skills.map((skill, index) => (
                       <span key={index} className="skill-tag-display removable">
                         {skill}
-                        
+
                         <button
                           className="remove-skill"
                           onClick={(e) => {
